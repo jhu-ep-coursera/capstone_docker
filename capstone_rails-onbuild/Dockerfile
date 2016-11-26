@@ -1,7 +1,7 @@
 # this file creates a ruby VM that provides and environment
 # running the capstone software and hosting RSpec and Capybara
 # tests
-FROM capstone_rails:latest
+FROM ejavaguy/capstone_rails:latest
 MAINTAINER Jim Stafford <jim.stafford@jhu.edu>
 
 # VM will be rebuilt from this point when these files change
