@@ -1,0 +1,86 @@
+# docker-compose run railsvm rails-api new . --force -d postgresql --skip-bundle --skip-test-unit
+# docker-compose build
+# docker-compose run railsvm rake db:create
+# docker-compose run railsvm rake db:migrate
+# docker-compose up railsvm
+# docker-compose up rake
+version: '2'
+services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD
+  mongo:
+    image: mongo
+  railsvm:
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/myapp
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - mongo
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PASSWORD
+      - MONGO_HOST=mongo:27017
+      - GMAPS_GEOCODE_KEY
+      - GMAPS_JSMAPS_KEY
+  rake:
+    build: .
+    command: docker/docker-rake-commands.sh
+    volumes:
+      - .:/myapp
+    depends_on:
+      - postgres
+      - mongo
+    links:
+      - selenium_rake
+    ports:
+      - "3010:3010"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PASSWORD
+      - MONGO_HOST=mongo:27017
+      - GMAPS_GEOCODE_KEY
+      - GMAPS_JSMAPS_KEY
+      - VNC_PASSWORD=password
+  selenium_rake:
+#    image: selenium/standalone-firefox-debug:2.47.1
+    image: selenium/standalone-chrome-debug:2.47.1
+    ports:
+      - "4444:4444"
+
+  test:
+    build: .
+    command: docker/docker-test-commands.sh
+    volumes:
+      - .:/myapp
+    depends_on:
+      - postgres
+      - mongo
+    links:
+      - selenium
+    ports:
+      - "3010:3010"
+      - "5900:5900"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PASSWORD
+      - MONGO_HOST=mongo:27017
+      - GMAPS_GEOCODE_KEY
+      - GMAPS_JSMAPS_KEY
+      - APP_PORT=3010
+      - SELENIUM_HOST=selenium
+      - VNC_PASSWORD=password
+  selenium:
+#    image: selenium/standalone-firefox-debug:2.47.1
+    image: selenium/standalone-chrome-debug:2.47.1
+    ports:
+      - "4444:4444"
+      - "5901:5900"
