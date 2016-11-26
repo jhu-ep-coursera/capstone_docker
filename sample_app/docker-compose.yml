@@ -38,7 +38,7 @@ services:
       - postgres
       - mongo
     links:
-      - selenium_rake
+      - selenium
     ports:
       - "3010:3010"
     environment:
@@ -48,12 +48,9 @@ services:
       - MONGO_HOST=mongo:27017
       - GMAPS_GEOCODE_KEY
       - GMAPS_JSMAPS_KEY
+      - APP_PORT=3010
+      - SELENIUM_REMOTE_HOST=selenium
       - VNC_PASSWORD=password
-  selenium_rake:
-#    image: selenium/standalone-firefox-debug:2.47.1
-    image: selenium/standalone-chrome-debug:2.47.1
-    ports:
-      - "4444:4444"
 
   test:
     build: .
@@ -76,7 +73,7 @@ services:
       - GMAPS_GEOCODE_KEY
       - GMAPS_JSMAPS_KEY
       - APP_PORT=3010
-      - SELENIUM_HOST=selenium
+      - SELENIUM_REMOTE_HOST=selenium
       - VNC_PASSWORD=password
   selenium:
 #    image: selenium/standalone-firefox-debug:2.47.1
