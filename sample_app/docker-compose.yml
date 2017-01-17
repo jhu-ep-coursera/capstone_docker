@@ -37,7 +37,6 @@ services:
     depends_on:
       - postgres
       - mongo
-    links:
       - selenium
     ports:
       - "3010:3010"
@@ -60,7 +59,6 @@ services:
     depends_on:
       - postgres
       - mongo
-    links:
       - selenium
     ports:
       - "3010:3010"
