@@ -1,1 +1,1 @@
-docker build . -t capstone_rails
+docker build . -t ejavaguy/capstone_rails
