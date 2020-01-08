@@ -1,7 +1,7 @@
 # this file creates a ruby VM that provides and environment
 # running the capstone software and hosting RSpec and Capybara
 # tests
-FROM ruby:2.2
+FROM ruby:2.3
 MAINTAINER Jim Stafford <jim.stafford@jhu.edu>
 
 # Install firefox (aka iceweasel)
